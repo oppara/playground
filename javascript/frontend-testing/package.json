@@ -1,0 +1,25 @@
+{
+  "name": "frontend-testing",
+  "version": "1.0.0",
+  "description": "[フロントエンドにテストを導入](http://qiita.com/howdy39/items/cdd5b252096f5a2fa438)",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "karma": "^0.13.22",
+    "karma-chrome-launcher": "^1.0.1",
+    "karma-mocha": "^1.0.1",
+    "karma-webpack": "^1.7.0",
+    "mocha": "^2.4.5",
+    "webpack": "^1.13.0"
+  },
+  "scripts": {
+    "test": "karma start",
+    "build": "webpack -p -d"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
