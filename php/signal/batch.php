@@ -1,48 +1,76 @@
 <?php
 declare(strict_types=1);
 
-$terminate = false;
-$log = 'batch.log';
+class Batch
+{
+    private $terminate = false;
 
-// 非同期シグナルを有効化
-pcntl_async_signals(true);
+    private $log = 'batch.log';
 
-pcntl_signal(SIGQUIT, function ($sig) use (&$terminate, $log): void {
-    file_put_contents($log, '[SIGQUIT! ' . $sig . ']', FILE_APPEND);
-    $terminate = true;
-});
+    public function __construct()
+    {
+        // 非同期シグナルを有効化
+        pcntl_async_signals(true);
 
-pcntl_signal(SIGHUP, function ($sig) use (&$terminate, $log): void {
-    file_put_contents($log, '[SIGHUP! ' . $sig . ']', FILE_APPEND);
-    $terminate = true;
-});
+        pcntl_signal(SIGTERM, [$this, 'handler']);
+        pcntl_signal(SIGINT, [$this, 'handler']);
+        pcntl_signal(SIGHUP, [$this, 'handler']);
+        pcntl_signal(SIGQUIT, [$this, 'handler']);
+        pcntl_signal(SIGUSR2, [$this, 'handler']);
 
-pcntl_signal(SIGTERM, function ($sig) use (&$terminate, $log): void {
-    file_put_contents($log, '[SIGTERM! ' . $sig . ']', FILE_APPEND);
-    $terminate = true;
-});
+        // SIGUSR1 は無視
+        pcntl_signal(SIGUSR1, SIG_IGN);
+    }
 
-pcntl_signal(SIGINT, function ($sig) use (&$terminate, $log): void {
-    file_put_contents($log, '[SIGINT! ' . $sig . ']', FILE_APPEND);
-    $terminate = true;
-});
+    public function execute(): void
+    {
+        while (true) {
+            $this->log('start,');
+            sleep(1);
+            $this->log('contents_get,');
+            sleep(1);
+            $this->log('parse,');
+            sleep(1);
+            $this->log('end' . PHP_EOL);
+            sleep(1);
 
+            if ($this->terminate) {
+                $this->log('terminate' . PHP_EOL);
+                break;
+            }
+        }
+    }
 
-// SIGUSR1 を無視
-pcntl_signal(SIGUSR1, SIG_IGN);
+    private function handler($signo): void
+    {
+        switch ($signo) {
+            case SIGTERM:
+                $this->log('[SIGTERM]');
+                $this->terminate = true;
+                break;
+            case SIGINT:
+                $this->log('[SIGINT]');
+                $this->terminate = true;
+                break;
+            case SIGQUIT:
+                $this->log('[SIGQUIT]');
+                $this->terminate = true;
+                break;
+            case SIGHUP:
+                $this->log('[SIGHUP]');
+                $this->terminate = true;
+                break;
+            default:
+                $this->log('[' . $signo . ']');
+                $this->terminate = true;
+                break;
+        }
+    }
 
-while (true) {
-    file_put_contents($log, 'start,', FILE_APPEND);
-    sleep(1);
-    file_put_contents($log, 'contents_get,', FILE_APPEND);
-    sleep(1);
-    file_put_contents($log, 'parse,', FILE_APPEND);
-    sleep(1);
-    file_put_contents($log, 'end' . PHP_EOL, FILE_APPEND);
-    sleep(1);
-
-    if ($terminate) {
-        file_put_contents($log, 'terminate' . PHP_EOL, FILE_APPEND);
-        break;
+    private function log($log): void
+    {
+        file_put_contents($this->log, $log, FILE_APPEND);
     }
 }
+
+(new Batch())->execute();
