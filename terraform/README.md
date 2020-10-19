@@ -34,6 +34,17 @@ fi
 % tflint --deep --aws-region=ap-northeast-1
 ```
 
+## [tfenv](https://github.com/tfutils/tfenv)
+
+```sh
+% anyenv install tfenv
+% exec $SHELL -l 
+
+% mkdir -p $(anyenv root)/plugins
+% git clone https://github.com/rugamaga/anyenv-tfenv-init.git $(anyenv root)/plugins/anyenv-tf
+```
+
+
 ## 参照
 
 * [Terraform Tips - Qiita](https://qiita.com/str416yb/items/3f7d4cd0f63c3535ff48)
