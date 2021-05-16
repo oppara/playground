@@ -57,5 +57,5 @@ output "vpc_id" {
 }
 
 output "subnet_ids" {
-  value = [aws_subnet.wdb116.0.id,aws_subnet.wdb116.1.id]
+  value = [aws_subnet.wdb116.0.id, aws_subnet.wdb116.1.id]
 }
