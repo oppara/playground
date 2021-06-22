@@ -150,3 +150,12 @@ Resources:
       LogGroupName:
         !Sub '/aws/imagebuilder/${Recipe.Name}'
       RetentionInDays: 7
+
+#---------------------------------------------------------------------------
+Outputs:
+#---------------------------------------------------------------------------
+  PipelineARN:
+    Description: 'Image Pipeline ARN'
+    Value: !Ref Pipeline
+    Export:
+      Name: !Sub '${AWS::StackName}-pipline-arn'

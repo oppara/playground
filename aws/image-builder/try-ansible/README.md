@@ -15,7 +15,13 @@ $ make upload-component
 ## CloudFormation Stack のデプロイ
 
 ```
-$ rain deploy imagebuilder.cf.yml --params BucketName=try-imagebuilder-with-ansible,AmiName=amzn2
+$ make deploy
+```
+
+## イメージパイプラインの実行
+
+```
+$ make start-pipline
 ```
 
 ## 参考サイト
