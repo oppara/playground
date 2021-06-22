@@ -5,7 +5,7 @@
   shell: cat /dev/null > {{ item }}
   with_items:
     - /etc/httpd/conf.d/autoindex.conf
-    - /etc/httpd/conf.d/welcom.conf
+    - /etc/httpd/conf.d/welcome.conf
   notify: restart httpd
 
 - name: add security config
