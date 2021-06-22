@@ -1,0 +1,9 @@
+---
+
+- name: systemd restart httpd
+  become: yes
+  systemd:
+    name: httpd
+    state: restarted
+  listen: restart httpd
+

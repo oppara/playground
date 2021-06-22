@@ -1,0 +1,17 @@
+---
+
+- name: disable expose_php
+  become: yes
+  lineinfile:
+    path: /etc/php.ini
+    regexp: ^expose_php = On
+    line: "expose_php = Off"
+  notify: restart httpd
+
+- name: enable session.use_strict_mode
+  become: yes
+  lineinfile:
+    path: /etc/php.ini
+    regexp: ^session.use_strict_mode = 0
+    line: "session.use_strict_mode = 1"
+  notify: restart httpd

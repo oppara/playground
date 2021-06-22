@@ -1,0 +1,72 @@
+---
+
+- name: install required packages
+  become: yes
+  yum:
+    name:
+      - gcc-c++
+      - libtool
+      - openssl-devel
+      - libxml2-devel
+      - krb5-devel
+      - libxslt-devel
+      - libedit-devel
+      - postgresql-devel
+      - ncurses-compat-libs
+    state: present
+
+- name: install epel
+  become: yes
+  shell: yes | amazon-linux-extras install epel
+
+- name: install remi repo
+  become: yes
+  yum:
+    name: https://rpms.remirepo.net/enterprise/remi-release-7.rpm
+    state: present
+
+- name: import remi gpg key
+  become: yes
+  rpm_key:
+    key: https://rpms.remirepo.net/RPM-GPG-KEY-remi
+    state: present
+
+- name: install gd
+  become: yes
+  yum:
+    name: gd-last
+    state: present
+    enablerepo: remi-php{{ php_version }}
+
+- name: install php packages
+  become: yes
+  yum:
+    name:
+      - php
+      - php-devel
+      - php-common
+      - php-cli
+      - php-gd
+      - php-mbstring
+      - php-imap
+      - php-intl
+      - php-mcrypt
+      - php-pdo
+      - php-pgsql
+      - php-mysql
+      - php-xml
+      - php-bcmath
+      - php-zip
+      - php-opcache
+    state: present
+    enablerepo: remi-php{{ php_version }}
+    disablerepo: amzn2-core
+
+- name: set opcache.revalidate_freq=60
+  become: yes
+  lineinfile:
+    path: /etc/php.d/10-opcache.ini
+    regexp: ^;opcache.revalidate_freq=2
+    line: "opcache.revalidate_freq=60"
+  notify: restart httpd
+

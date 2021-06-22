@@ -1,0 +1,13 @@
+---
+- hosts: 127.0.0.1
+  gather_facts: false
+  connection: local
+  become: yes
+
+  vars:
+    php_version: 74
+
+  roles:
+    - httpd
+    - php
+    - assets

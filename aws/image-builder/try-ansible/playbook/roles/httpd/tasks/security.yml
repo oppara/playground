@@ -1,0 +1,19 @@
+---
+
+- name: disable unused config
+  become: yes
+  shell: cat /dev/null > {{ item }}
+  with_items:
+    - /etc/httpd/conf.d/autoindex.conf
+    - /etc/httpd/conf.d/welcom.conf
+  notify: restart httpd
+
+- name: add security config
+  become: yes
+  copy:
+    src: 000-security.conf
+    dest: /etc/httpd/conf.d/000-security.conf
+    owner: root
+    group: root
+    mode: 0644
+  notify: restart httpd

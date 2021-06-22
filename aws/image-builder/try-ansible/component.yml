@@ -1,0 +1,64 @@
+name: 'Ansible Playbook Execution on Amazon Linux 2'
+schemaVersion: 1.0
+phases:
+  - name: build
+    steps:
+      - name: UpdateYum
+        action: ExecuteBash
+        inputs:
+          commands:
+            - yum update -y
+
+      - name: SetTimezone
+        action: ExecuteBash
+        inputs:
+          commands:
+            - timedatectl set-timezone Asia/Tokyo
+            - systemctl restart crond
+
+      - name: InstallAnsible
+        action: ExecuteBash
+        inputs:
+          commands:
+            - amazon-linux-extras install -y ansible2
+
+      - name: CreateWorkingDirectory
+        action: ExecuteBash
+        inputs:
+          commands:
+            - mkdir /tmp/ansible
+
+      - name: DownloadPlaybook
+        action: S3Download
+        inputs:
+          - source: 's3://try-image-builder-with-ansible/playbook/*'
+            destination: '/tmp/ansible'
+
+      - name: ExecutePlaybook
+        action: ExecuteBash
+        inputs:
+          commands:
+            - cd /tmp/ansible
+            - ansible-playbook playbook.yml  -e '{"php_version":"74"}'
+
+      - name: DeletePlaybook
+        action: ExecuteBash
+        inputs:
+          commands:
+            - rm -rf '{{ build.DownloadPlaybook.inputs[0].destination }}'
+
+  - name: validate
+    steps:
+      - name: ValidateResponse
+        action: ExecuteBash
+        inputs:
+          commands:
+            - curl -s http://127.0.0.1 | grep -E '2[0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9] [0-2][0-9]:[0-5][0-9]:[0-5][0-9]'
+
+  - name: test
+    steps:
+      - name: ValidateResponse
+        action: ExecuteBash
+        inputs:
+          commands:
+            - curl -s http://127.0.0.1 | grep -E '2[0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9] [0-2][0-9]:[0-5][0-9]:[0-5][0-9]'

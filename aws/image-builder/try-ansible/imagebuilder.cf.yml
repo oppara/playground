@@ -1,0 +1,152 @@
+AWSTemplateFormatVersion: 2010-09-09
+
+
+#---------------------------------------------------------------------------
+Metadata:
+#---------------------------------------------------------------------------
+  'AWS::CloudFormation::Interface':
+    ParameterGroups:
+      - Label:
+          default: 'System'
+        Parameters:
+          - SystemName
+      - Label:
+          default: 'Parameters'
+        Parameters:
+          - BucketName
+          - Version
+          - AmiName
+
+#---------------------------------------------------------------------------
+Parameters:
+#---------------------------------------------------------------------------
+  SystemName:
+    Description: 'System identifier'
+    Type: String
+    MinLength: '1'
+    Default: example
+
+  BucketName:
+    Description: Bucket name  where the playbook and component.yml were uploaded (Required)
+    Type: String
+    MinLength: '1'
+
+  Version:
+    Description: Version number (Required)
+    Type: String
+    AllowedPattern: "^[0-9]+\\.[0-9]+\\.[0-9]+$"
+    Default: 0.1.0
+
+  AmiName:
+    Description: AMI name prefix (Required)
+    Type: String
+    MinLength: '1'
+
+#---------------------------------------------------------------------------
+Resources:
+#---------------------------------------------------------------------------
+
+  ImageBuilderRole:
+    Type: 'AWS::IAM::Role'
+    Properties:
+      RoleName:
+        !Sub '${SystemName}-imagebuilder-role'
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - ec2.amazonaws.com
+            Action: sts:AssumeRole
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore
+        - arn:aws:iam::aws:policy/EC2InstanceProfileForImageBuilder
+      Policies:
+        - PolicyName: !Sub '${SystemName}-imagebuilder-policy'
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action:
+                  - s3:ListBucket
+                Resource:
+                  - !Sub 'arn:aws:s3:::${BucketName}'
+              - Effect: Allow
+                Action:
+                  - s3:GetObject
+                  - s3:PutObject
+                Resource:
+                  - !Sub 'arn:aws:s3:::${BucketName}/*'
+      Tags:
+        - Key: SystemName
+          Value: !Sub ${SystemName}
+
+  InstanceProfile:
+    Type: AWS::IAM::InstanceProfile
+    Properties:
+      InstanceProfileName: ImageBuilderInstanceProfile
+      Roles:
+        - !Ref ImageBuilderRole
+
+  Component:
+    Type: AWS::ImageBuilder::Component
+    Properties:
+      Name:
+        !Sub '${SystemName}-component'
+      Platform: Linux
+      SupportedOsVersions:
+        - 'Amazon Linux 2'
+      Version: !Ref Version
+      Uri: !Sub 's3://${BucketName}/component.yml'
+
+  Recipe:
+    Type: AWS::ImageBuilder::ImageRecipe
+    Properties:
+      Name:
+        !Sub '${SystemName}-recipe'
+      Version: !Ref Version
+      Components:
+        - ComponentArn: arn:aws:imagebuilder:ap-northeast-1:aws:component/update-linux/1.0.0/1
+        - ComponentArn: arn:aws:imagebuilder:ap-northeast-1:aws:component/amazon-cloudwatch-agent-linux/1.0.0/1
+        - ComponentArn: arn:aws:imagebuilder:ap-northeast-1:aws:component/aws-codedeploy-agent-linux/1.0.0/1
+        - ComponentArn: !GetAtt Component.Arn
+      ParentImage: arn:aws:imagebuilder:ap-northeast-1:aws:image/amazon-linux-2-x86/x.x.x
+
+
+  Pipeline:
+    Type: AWS::ImageBuilder::ImagePipeline
+    Properties:
+      Name:
+        !Sub '${SystemName}-pipline'
+      ImageRecipeArn: !Ref Recipe
+      InfrastructureConfigurationArn: !Ref InfrastructureConfiguration
+      DistributionConfigurationArn: !Ref DistributionConfiguration
+
+  InfrastructureConfiguration:
+    Type: AWS::ImageBuilder::InfrastructureConfiguration
+    Properties:
+      Name:
+        !Sub '${SystemName}-infrastructure'
+      InstanceProfileName: !Ref InstanceProfile
+      InstanceTypes:
+        - 't3.small'
+      TerminateInstanceOnFailure: True
+
+  DistributionConfiguration:
+    Type: AWS::ImageBuilder::DistributionConfiguration
+    Properties:
+      Name:
+        !Sub '${SystemName}-distribution'
+      Distributions:
+        - Region: ap-northeast-1
+          AmiDistributionConfiguration:
+            Name:
+              !Sub '${AmiName}-{{ imagebuilder:buildDate }}'
+
+  BuilderLogGroup:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName:
+        !Sub '/aws/imagebuilder/${Recipe.Name}'
+      RetentionInDays: 7
