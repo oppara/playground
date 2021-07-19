@@ -1,0 +1,27 @@
+AWSTemplateFormatVersion: '2010-09-09'
+
+Resources:
+  IAMUser:
+    Type: AWS::IAM::User
+    Properties:
+      Path: /
+      UserName: IAMUser
+
+  IAMUserAccessKey:
+    Type: AWS::IAM::AccessKey
+    Properties:
+      UserName: !Ref IAMUser
+
+  IAMUserAccessKeySecret:
+    Type: AWS::SecretsManager::Secret
+    Properties:
+      Name: !Sub ${IAMUser}-credentials
+      SecretString:
+        !Sub '{"accessKey": "${IAMUserAccessKey}", "secretAccessKey":"${IAMUserAccessKey.SecretAccessKey}"}'
+
+Outputs:
+  IAMUserAccessKeySecretName:
+    Value: !Sub ${IAMUser}-credentials
+  IAMUserAccessKeySecretArn:
+    Value: !Ref IAMUserAccessKeySecret
+
