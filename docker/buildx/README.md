@@ -81,10 +81,10 @@ default             docker
 `try-buildx`というリポジトリを作っておく。
 
 ```sh
+% docker buildx create --name mybuilder
+% docker buildx use mybuilder
 % docker login gitlab.example.com:5002
-% docker buildx create --use
-% docker buildx build --platform linux/amd64 -t gitlab.example.com:5002/oppara/try-buildx/x86 --push .
-% docker buildx build --platform linux/arm64 -t gitlab.example.com:5002/oppara/try-buildx/arm --push .
+% docker buildx build --platform linux/amd64,linux/arm64 -t gitlab.example.com:5002/oppara/try-buildx/go-webserver-sample --push .
 ```
 
 [GitLab Container Registry - Qiita](https://qiita.com/masakura/items/802f4b8ce322d2543c80)
@@ -101,12 +101,7 @@ default             docker
 ```sh
 % sudo su - ec2-user
 % docker login example.com:5002
- 
-x86
-% docker container run -p 80:8080 --rm -d example.com:5002/e2_oohara/docker-buildx/x86
-
-arm
-% docker container run -p 80:8080 --rm -d example.com:5002/e2_oohara/docker-buildx/arm64
+% docker run -p 80:8080 --rm -d example.com:5002/oppara/try-buildx/go-webserver-sample
 ```
 
 
