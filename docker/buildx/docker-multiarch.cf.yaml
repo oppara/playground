@@ -1,0 +1,278 @@
+---
+AWSTemplateFormatVersion: "2010-09-09"
+Description: "Launch x86(AMD64) and ARM64(Graviton2) EC2 instances with VPC environment"
+
+Metadata:
+  AWS::CloudFormation::Interface:
+    ParameterGroups:
+      - Label:
+          default: "General Information"
+        Parameters:
+          - SystemName
+      - Label:
+          default: "Network Configuration"
+        Parameters:
+          - CidrBlockVPC
+          - CidrBlockSubnetPublic
+      - Label:
+          default: "x86(AMD64) EC2 Instance Configuration"
+        Parameters:
+          - X86ImageID
+          - X86InstanceType
+          - X86VolumeType
+          - X86VolumeSize
+      - Label:
+          default: "ARM64(Graviton2) EC2 Instance Configuration"
+        Parameters:
+          - ARM64ImageID
+          - ARM64InstanceType
+          - ARM64VolumeType
+          - ARM64VolumeSize
+
+Parameters:
+  SystemName:
+    Type: String
+    Default: docker-multiarch
+
+  CidrBlockVPC:
+    Type: String
+    Default: 192.168.0.0/16
+
+  CidrBlockSubnetPublic:
+    Type: String
+    Default: 192.168.1.0/24
+
+  X86ImageID:
+    Type: AWS::SSM::Parameter::Value<AWS::EC2::Image::Id>
+    Default: /aws/service/ami-amazon-linux-latest/amzn2-ami-hvm-x86_64-gp2
+
+  X86InstanceType:
+    Type: String
+    Default: t3.small
+
+  X86VolumeType:
+    Type: String
+    Default: gp2
+
+  X86VolumeSize:
+    Type: String
+    Default: 20
+
+  ARM64ImageID:
+    Type: AWS::SSM::Parameter::Value<AWS::EC2::Image::Id>
+    Default: /aws/service/ami-amazon-linux-latest/amzn2-ami-hvm-arm64-gp2
+
+  ARM64InstanceType:
+    Type: String
+    Default: t4g.small
+
+  ARM64VolumeType:
+    Type: String
+    Default: gp2
+
+  ARM64VolumeSize:
+    Type: String
+    Default: 20
+
+Resources:
+  VPC:
+    Type: AWS::EC2::VPC
+    Properties:
+      CidrBlock: !Ref CidrBlockVPC
+      EnableDnsSupport: true
+      EnableDnsHostnames: true
+      InstanceTenancy: default
+      Tags:
+        - Key: Name
+          Value: !Sub "${SystemName}-vpc"
+        - Key: System
+          Value: !Ref SystemName
+
+  InternetGateway:
+    Type: AWS::EC2::InternetGateway
+    Properties:
+      Tags:
+        - Key: Name
+          Value: !Sub "${SystemName}-igw"
+        - Key: System
+          Value: !Ref SystemName
+
+  VPCGatewayAttachment:
+    Type: AWS::EC2::VPCGatewayAttachment
+    Properties:
+      InternetGatewayId: !Ref InternetGateway
+      VpcId: !Ref VPC
+
+  SubnetPublic:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref VPC
+      AvailabilityZone: !Select
+        - 0
+        - Fn::GetAZs: !Ref AWS::Region
+      CidrBlock: !Ref CidrBlockSubnetPublic
+      MapPublicIpOnLaunch: true
+      Tags:
+        - Key: Name
+          Value: !Sub "${SystemName}-public-subnet"
+        - Key: System
+          Value: !Ref SystemName
+
+  RouteTablePublic:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId: !Ref VPC
+      Tags:
+        - Key: Name
+          Value: !Sub "${SystemName}-public-rtb"
+        - Key: System
+          Value: !Ref SystemName
+
+  RouteIGW:
+    DependsOn:
+      - VPCGatewayAttachment
+    Type: AWS::EC2::Route
+    Properties:
+      RouteTableId: !Ref RouteTablePublic
+      DestinationCidrBlock: 0.0.0.0/0
+      GatewayId: !Ref InternetGateway
+
+  RouteTableAssociationPublic:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      SubnetId: !Ref SubnetPublic
+      RouteTableId: !Ref RouteTablePublic
+
+  SecurityGroupServer:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupName: !Sub "${SystemName}-server-sg"
+      GroupDescription: "Security group for server"
+      VpcId: !Ref VPC
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 80
+          ToPort: 80
+          CidrIp: "0.0.0.0/0"
+      Tags:
+        - Key: Name
+          Value: !Sub "${SystemName}-server-sg"
+        - Key: System
+          Value: !Ref SystemName
+
+  EC2SsmRole:
+    Type: 'AWS::IAM::Role'
+    Properties:
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/service-role/AmazonEC2RoleforSSM
+        - arn:aws:iam::aws:policy/AmazonEC2ReadOnlyAccess
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Sid: AssumeRole1
+            Effect: Allow
+            Principal:
+              Service: ec2.amazonaws.com
+            Action: sts:AssumeRole
+
+  EC2InstanceProfile:
+    Type: AWS::IAM::InstanceProfile
+    Properties:
+      Path: "/"
+      Roles:
+        - !Ref EC2SsmRole
+
+  EC2InstanceX86:
+    Type: AWS::EC2::Instance
+    Properties:
+      ImageId: !Ref X86ImageID
+      InstanceType: !Ref X86InstanceType
+      IamInstanceProfile:
+        !Ref EC2InstanceProfile
+      BlockDeviceMappings:
+        - DeviceName: /dev/xvda
+          Ebs:
+            VolumeType: !Ref X86VolumeType
+            VolumeSize: !Ref X86VolumeSize
+      NetworkInterfaces:
+        - DeviceIndex: "0"
+          SubnetId: !Ref SubnetPublic
+          GroupSet:
+            - !Ref SecurityGroupServer
+      UserData:
+        Fn::Base64: |
+          #!/bin/bash -xe
+          yum update -y
+          amazon-linux-extras install -y docker=latest
+          systemctl enable docker.service
+          systemctl start docker.service
+          usermod -aG docker ec2-user
+      Tags:
+        - Key: Name
+          Value: !Sub "${SystemName}-x86"
+        - Key: System
+          Value: !Ref SystemName
+
+  EC2InstanceARM64:
+    Type: AWS::EC2::Instance
+    Properties:
+      ImageId: !Ref ARM64ImageID
+      InstanceType: !Ref ARM64InstanceType
+      IamInstanceProfile:
+        !Ref EC2InstanceProfile
+      BlockDeviceMappings:
+        - DeviceName: /dev/xvda
+          Ebs:
+            VolumeType: !Ref ARM64VolumeType
+            VolumeSize: !Ref ARM64VolumeSize
+      NetworkInterfaces:
+        - DeviceIndex: "0"
+          SubnetId: !Ref SubnetPublic
+          GroupSet:
+            - !Ref SecurityGroupServer
+      UserData:
+        Fn::Base64: |
+          #!/bin/bash -xe
+          yum update -y
+          amazon-linux-extras install -y docker=latest
+          systemctl enable docker.service
+          systemctl start docker.service
+          usermod -aG docker ec2-user
+      Tags:
+        - Key: Name
+          Value: !Sub "${SystemName}-arm64"
+        - Key: System
+          Value: !Ref SystemName
+
+Outputs:
+  VPC:
+    Value: !Ref VPC
+    Export:
+      Name: !Sub "${AWS::StackName}::VPC"
+
+  SubnetPublic:
+    Value: !Ref SubnetPublic
+    Export:
+      Name: !Sub "${AWS::StackName}::SubnetPublic"
+
+  SecurityGroupServer:
+    Value: !Ref SecurityGroupServer
+    Export:
+      Name: !Sub "${AWS::StackName}::SecurityGroupServer"
+
+  EC2InstanceX86:
+    Value: !Ref EC2InstanceX86
+    Export:
+      Name: !Sub "${AWS::StackName}::EC2InstanceX86"
+
+  EC2InstanceX86Ip:
+    Value: !GetAtt EC2InstanceX86.PublicIp
+
+  EC2InstanceARM64:
+    Value: !Ref EC2InstanceARM64
+    Export:
+      Name: !Sub "${AWS::StackName}::EC2InstanceARM64"
+
+  EC2InstanceARM64Ip:
+    Value: !GetAtt EC2InstanceARM64.PublicIp
+
