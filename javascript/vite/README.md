@@ -1,8 +1,7 @@
-# try vite
+# Try vite with https
 
 [Getting Started | Vite](https://vitejs.dev/guide/#scaffolding-your-first-vite-project)
 
-[viteでhttpsなlocalhostを起動する | DevelopersIO](https://dev.classmethod.jp/articles/vite-https-localhost/)
 
 
 ## サンプルプロジェクトを作成
@@ -22,7 +21,11 @@ Done. Now run:
   npm run dev
 ```
 
-## mkcertで証明書を発行
+## mkcert を使ってみる
+
+[viteでhttpsなlocalhostを起動する | DevelopersIO](https://dev.classmethod.jp/articles/vite-https-localhost/)
+
+### mkcertで証明書を発行
 
 [mkcert](https://github.com/FiloSottile/mkcert) をインストールする。
 
@@ -65,7 +68,7 @@ The certificate is at "./localhost.pem" and the key at "./localhost-key.pem" ✅
 It will expire on 16 January 2024 🗓
 ```
 
-## vite.config.tsを編集
+### vite.config.tsを編集
 
 ```diff
 --- a/javascript/vite/my-vue-app/vite.config.ts
@@ -88,7 +91,62 @@ It will expire on 16 January 2024 🗓
  })
 ```
 
-## ローカルサーバを起動
+### ローカルサーバを起動
+
+```
+% npm run dev
+```
+
+`https://localhost:3000/` にブラウザでアクセスする。
+
+
+## devcert を使ってみる
+
+[viteでhttpsなlocalhostを起動する（devcert編） | DevelopersIO](https://dev.classmethod.jp/articles/vite-https-localhost-devcert/)
+
+### devcert のインストール
+
+```
+% npm i -D devcert
+```
+
+### vite.config.tsを編集
+
+```diff
+--- a/javascript/vite/my-vue-app/vite.config.ts
++++ b/javascript/vite/my-vue-app/vite.config.ts
+@@ -1,14 +1,20 @@
+-import { defineConfig } from 'vite'
++import { UserConfigExport  } from 'vite'
+ import vue from '@vitejs/plugin-vue'
+-import fs from 'fs'
++import devcert from 'devcert'
++
+
+ // https://vitejs.dev/config/
+-export default defineConfig({
++export default async (): Promise<UserConfigExport> => {
++  const { key, cert } = await devcert.certificateFor('localhost')
++
++  return {
+     plugins: [vue()],
+     server: {
++      open: true,
+       https: {
+-     key: fs.readFileSync('./localhost-key.pem'),
+-     cert: fs.readFileSync('./localhost.pem'),
+-   }
++        key,
++        cert,
+       },
+-})
++    },
++  }
++}
+```
+
+
+### ローカルサーバを起動
 
 ```
 % npm run dev

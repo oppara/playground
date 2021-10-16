@@ -1,14 +1,20 @@
-import { defineConfig } from 'vite'
+import { UserConfigExport  } from 'vite'
 import vue from '@vitejs/plugin-vue'
-import fs from 'fs'
+import devcert from 'devcert'
+
 
 // https://vitejs.dev/config/
-export default defineConfig({
-  plugins: [vue()],
-  server: {
-   https: {
-     key: fs.readFileSync('./localhost-key.pem'),
-     cert: fs.readFileSync('./localhost.pem'),
-   }
- },
-})
+export default async (): Promise<UserConfigExport> => {
+  const { key, cert } = await devcert.certificateFor('localhost')
+
+  return {
+    plugins: [vue()],
+    server: {
+      open: true,
+      https: {
+        key,
+        cert,
+      },
+    },
+  }
+}
