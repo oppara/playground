@@ -1,0 +1,17 @@
+version: '3'
+
+services:
+  php:
+    container_name: php_apache_mkcert
+    build: .
+    image: php_apache_mkcert
+    ports:
+      - 80:80
+      - 443:443
+    restart: always
+    privileged: true
+    volumes:
+      - ./htdocs:/var/www/html
+      - ./conf/default-ssl.conf:/etc/apache2/sites-enabled/default-ssl.conf
+      - ./certs:/etc/ssl/local/certs
+
