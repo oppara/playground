@@ -46,6 +46,8 @@ RUN set -ex; \
         | xargs -rt apt-mark manual; \
     \
     apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false; \
+    a2enmod ssl; \
+    a2enmod rewrite; \
     rm -rf /var/lib/apt/lists/*
 
 # set recommended PHP.ini settings
@@ -73,8 +75,4 @@ RUN { \
         echo 'ignore_repeated_source = Off'; \
         echo 'html_errors = Off'; \
     } > /usr/local/etc/php/conf.d/error-logging.ini
-
-RUN ln -s /etc/apache2/mods-available/socache_shmcb.load /etc/apache2/mods-enabled/socache_shmcb.load \
-    && ln -s /etc/apache2/mods-available/ssl.load /etc/apache2/mods-enabled/ssl.load \
-    && ln -s /etc/apache2/mods-available/ssl.ssl /etc/apache2/mods-enabled/ssl.ssl
 
