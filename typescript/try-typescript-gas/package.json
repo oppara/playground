@@ -1,0 +1,21 @@
+{
+  "name": "typescript-gas",
+  "version": "0.0.1",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "oppara <oppara@oppara.tv>",
+  "private": true,
+  "license": "MIT",
+  "devDependencies": {
+    "@google/clasp": "^2.4.1",
+    "@typescript-eslint/parser": "^5.1.0",
+    "eslint": "^8.0.1",
+    "eslint-config-google": "^0.14.0",
+    "eslint-plugin-googleappsscript": "^1.0.4",
+    "typescript": "^4.4.4"
+  }
+}
