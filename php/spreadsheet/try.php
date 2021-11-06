@@ -10,8 +10,6 @@ define('CREDENTIALS_PATH', $_ENV['AUTH_JSON_NAME']);
 define('SPREADSHEET_ID',   $_ENV['SPREADSHEET_ID']);
 define('SPREADSHEET_RANGE',   'シート1!A2');
 
-$key = __DIR__ . '/' . CREDENTIALS_PATH;
-
 $client = new Google\Client();
 $client->setScopes([Google\Service\Sheets::SPREADSHEETS, Google\Service\Sheets::DRIVE]);
 $client->setAuthConfig(__DIR__ . '/' . CREDENTIALS_PATH);
@@ -21,7 +19,7 @@ $sheet = new Google\Service\Sheets($client);
 $valueRange = new Google\Service\Sheets\ValueRange();
 
 // 1行分のデータを作成
-$values = ['hoge', 'foo', date('Y/m/d H:i:s')];
+$values = ['hoge', 1000, true, json_encode(['foo' => 'bar']), date('Y/m/d H:i:s')];
 $valueRange->setValues(['values' => $values]);
 
 // 書き込み実行
