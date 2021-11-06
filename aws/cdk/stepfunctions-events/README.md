@@ -4,6 +4,8 @@ This is a blank project for TypeScript development with CDK.
 
 The `cdk.json` file tells the CDK Toolkit how to execute your app.
 
+[Amazon EventBridgeルールでAWS Step Functionsステートマシンを定期実行する | DevelopersIO](https://dev.classmethod.jp/articles/run-the-aws-step-functions-state-machine-periodically-with-amazon-eventbridge-rules/)
+
 ## Useful commands
 
  * `npm run build`   compile typescript to js
@@ -12,3 +14,4 @@ The `cdk.json` file tells the CDK Toolkit how to execute your app.
  * `cdk deploy`      deploy this stack to your default AWS account/region
  * `cdk diff`        compare deployed stack with current state
  * `cdk synth`       emits the synthesized CloudFormation template
+
