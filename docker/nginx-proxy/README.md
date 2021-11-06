@@ -17,7 +17,7 @@ http://hoge.example.local でアクセスする場合。
 ### 1. `nginx-proxy` を立ち上げておく
 
 ```
-% git clone git@gitlab.e-2.jp:e2_oohara/docker-nginx-proxy.git
+% git clone git@example.com:oppara/docker-nginx-proxy.git
 % cd docker-nginx-proxy
 % make up
 ```
