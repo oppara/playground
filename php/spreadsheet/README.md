@@ -33,7 +33,15 @@
 $ composer require google/apiclient
 ```
 
-### 5. スクリプトを書く
+### 5. .env ファイルを作成
+
+```conf:.env
+AUTH_JSON_NAME="2-5 でダウンロードした json ファイル名"
+SPREADSHEET_ID="3-2 で控えたスプレッドシートの ID"
+```
+
+
+### 6. スクリプトを書く
 
 
 ## 参考サイト
