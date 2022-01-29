@@ -1,0 +1,269 @@
+{
+  "version": "tree-0.1",
+  "tree": {
+    "id": "App",
+    "path": "",
+    "children": {
+      "Tree": {
+        "id": "Tree",
+        "path": "Tree",
+        "constructInfo": {
+          "fqn": "@aws-cdk/core.Construct",
+          "version": "1.132.0"
+        }
+      },
+      "TryCfnIncludeStack": {
+        "id": "TryCfnIncludeStack",
+        "path": "TryCfnIncludeStack",
+        "children": {
+          "Template": {
+            "id": "Template",
+            "path": "TryCfnIncludeStack/Template",
+            "children": {
+              "$Mappings": {
+                "id": "$Mappings",
+                "path": "TryCfnIncludeStack/Template/$Mappings",
+                "constructInfo": {
+                  "fqn": "@aws-cdk/core.Construct",
+                  "version": "1.132.0"
+                }
+              },
+              "$Conditions": {
+                "id": "$Conditions",
+                "path": "TryCfnIncludeStack/Template/$Conditions",
+                "constructInfo": {
+                  "fqn": "@aws-cdk/core.Construct",
+                  "version": "1.132.0"
+                }
+              },
+              "$Rules": {
+                "id": "$Rules",
+                "path": "TryCfnIncludeStack/Template/$Rules",
+                "constructInfo": {
+                  "fqn": "@aws-cdk/core.Construct",
+                  "version": "1.132.0"
+                }
+              },
+              "MyBucket": {
+                "id": "MyBucket",
+                "path": "TryCfnIncludeStack/Template/MyBucket",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::S3::Bucket",
+                  "aws:cdk:cloudformation:props": {
+                    "publicAccessBlockConfiguration": {
+                      "blockPublicAcls": true,
+                      "blockPublicPolicy": true,
+                      "ignorePublicAcls": true,
+                      "restrictPublicBuckets": true
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "@aws-cdk/aws-s3.CfnBucket",
+                  "version": "1.132.0"
+                }
+              },
+              "$Hooks": {
+                "id": "$Hooks",
+                "path": "TryCfnIncludeStack/Template/$Hooks",
+                "constructInfo": {
+                  "fqn": "@aws-cdk/core.Construct",
+                  "version": "1.132.0"
+                }
+              },
+              "$Ouputs": {
+                "id": "$Ouputs",
+                "path": "TryCfnIncludeStack/Template/$Ouputs",
+                "constructInfo": {
+                  "fqn": "@aws-cdk/core.Construct",
+                  "version": "1.132.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "@aws-cdk/cloudformation-include.CfnInclude",
+              "version": "1.132.0"
+            }
+          },
+          "Bucket": {
+            "id": "Bucket",
+            "path": "TryCfnIncludeStack/Bucket",
+            "children": {
+              "Notifications": {
+                "id": "Notifications",
+                "path": "TryCfnIncludeStack/Bucket/Notifications",
+                "constructInfo": {
+                  "fqn": "@aws-cdk/core.Construct",
+                  "version": "1.132.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "@aws-cdk/aws-s3.BucketBase",
+              "version": "1.132.0"
+            }
+          },
+          "Role": {
+            "id": "Role",
+            "path": "TryCfnIncludeStack/Role",
+            "children": {
+              "Resource": {
+                "id": "Resource",
+                "path": "TryCfnIncludeStack/Role/Resource",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::IAM::Role",
+                  "aws:cdk:cloudformation:props": {
+                    "assumeRolePolicyDocument": {
+                      "Statement": [
+                        {
+                          "Action": "sts:AssumeRole",
+                          "Effect": "Allow",
+                          "Principal": {
+                            "AWS": {
+                              "Fn::Join": [
+                                "",
+                                [
+                                  "arn:",
+                                  {
+                                    "Ref": "AWS::Partition"
+                                  },
+                                  ":iam::",
+                                  {
+                                    "Ref": "AWS::AccountId"
+                                  },
+                                  ":root"
+                                ]
+                              ]
+                            }
+                          }
+                        }
+                      ],
+                      "Version": "2012-10-17"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "@aws-cdk/aws-iam.CfnRole",
+                  "version": "1.132.0"
+                }
+              },
+              "DefaultPolicy": {
+                "id": "DefaultPolicy",
+                "path": "TryCfnIncludeStack/Role/DefaultPolicy",
+                "children": {
+                  "Resource": {
+                    "id": "Resource",
+                    "path": "TryCfnIncludeStack/Role/DefaultPolicy/Resource",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::IAM::Policy",
+                      "aws:cdk:cloudformation:props": {
+                        "policyDocument": {
+                          "Statement": [
+                            {
+                              "Action": [
+                                "s3:GetObject*",
+                                "s3:GetBucket*",
+                                "s3:List*"
+                              ],
+                              "Effect": "Allow",
+                              "Resource": [
+                                {
+                                  "Fn::Join": [
+                                    "",
+                                    [
+                                      "arn:",
+                                      {
+                                        "Ref": "AWS::Partition"
+                                      },
+                                      ":s3:::",
+                                      {
+                                        "Ref": "MyBucket"
+                                      }
+                                    ]
+                                  ]
+                                },
+                                {
+                                  "Fn::Join": [
+                                    "",
+                                    [
+                                      "arn:",
+                                      {
+                                        "Ref": "AWS::Partition"
+                                      },
+                                      ":s3:::",
+                                      {
+                                        "Ref": "MyBucket"
+                                      },
+                                      "/*"
+                                    ]
+                                  ]
+                                }
+                              ]
+                            }
+                          ],
+                          "Version": "2012-10-17"
+                        },
+                        "policyName": "RoleDefaultPolicy5FFB7DAB",
+                        "roles": [
+                          {
+                            "Ref": "Role1ABCC5F0"
+                          }
+                        ]
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "@aws-cdk/aws-iam.CfnPolicy",
+                      "version": "1.132.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "@aws-cdk/aws-iam.Policy",
+                  "version": "1.132.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "@aws-cdk/aws-iam.Role",
+              "version": "1.132.0"
+            }
+          },
+          "CDKMetadata": {
+            "id": "CDKMetadata",
+            "path": "TryCfnIncludeStack/CDKMetadata",
+            "children": {
+              "Default": {
+                "id": "Default",
+                "path": "TryCfnIncludeStack/CDKMetadata/Default",
+                "constructInfo": {
+                  "fqn": "@aws-cdk/core.CfnResource",
+                  "version": "1.132.0"
+                }
+              },
+              "Condition": {
+                "id": "Condition",
+                "path": "TryCfnIncludeStack/CDKMetadata/Condition",
+                "constructInfo": {
+                  "fqn": "@aws-cdk/core.CfnCondition",
+                  "version": "1.132.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "@aws-cdk/core.Construct",
+              "version": "1.132.0"
+            }
+          }
+        },
+        "constructInfo": {
+          "fqn": "@aws-cdk/core.Stack",
+          "version": "1.132.0"
+        }
+      }
+    },
+    "constructInfo": {
+      "fqn": "@aws-cdk/core.App",
+      "version": "1.132.0"
+    }
+  }
+}

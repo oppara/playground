@@ -1,0 +1,172 @@
+{
+  "version": "14.0.0",
+  "artifacts": {
+    "Tree": {
+      "type": "cdk:tree",
+      "properties": {
+        "file": "tree.json"
+      }
+    },
+    "TryCfnIncludeStack": {
+      "type": "aws:cloudformation:stack",
+      "environment": "aws://unknown-account/unknown-region",
+      "properties": {
+        "templateFile": "TryCfnIncludeStack.template.json",
+        "validateOnSynth": false
+      },
+      "metadata": {
+        "/TryCfnIncludeStack/Template": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "Template",
+            "trace": [
+              "new TryCfnIncludeStack (/Users/oppara/src/github.com/oppara/playground/aws/cdk/try-cfn-include/lib/try-cfn-include-stack.ts:10:24)",
+              "Object.<anonymous> (/Users/oppara/src/github.com/oppara/playground/aws/cdk/try-cfn-include/bin/try-cfn-include.ts:7:1)",
+              "Module._compile (node:internal/modules/cjs/loader:1109:14)",
+              "Module.m._compile (/Users/oppara/src/github.com/oppara/playground/aws/cdk/try-cfn-include/node_modules/ts-node/src/index.ts:1056:23)",
+              "Module._extensions..js (node:internal/modules/cjs/loader:1138:10)",
+              "Object.require.extensions.<computed> [as .ts] (/Users/oppara/src/github.com/oppara/playground/aws/cdk/try-cfn-include/node_modules/ts-node/src/index.ts:1059:12)",
+              "Module.load (node:internal/modules/cjs/loader:989:32)",
+              "Function.Module._load (node:internal/modules/cjs/loader:829:14)",
+              "Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:76:12)",
+              "main (/Users/oppara/src/github.com/oppara/playground/aws/cdk/try-cfn-include/node_modules/ts-node/src/bin.ts:198:14)",
+              "Object.<anonymous> (/Users/oppara/src/github.com/oppara/playground/aws/cdk/try-cfn-include/node_modules/ts-node/src/bin.ts:288:3)",
+              "Module._compile (node:internal/modules/cjs/loader:1109:14)",
+              "Object.Module._extensions..js (node:internal/modules/cjs/loader:1138:10)",
+              "Module.load (node:internal/modules/cjs/loader:989:32)",
+              "Function.Module._load (node:internal/modules/cjs/loader:829:14)",
+              "Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:76:12)",
+              "node:internal/main/run_main_module:17:47"
+            ]
+          }
+        ],
+        "/TryCfnIncludeStack/Template/MyBucket": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "MyBucket",
+            "trace": [
+              "Function._fromCloudFormation (/Users/oppara/src/github.com/oppara/playground/aws/cdk/try-cfn-include/node_modules/@aws-cdk/aws-s3/lib/s3.generated.ts:496:21)",
+              "CfnInclude.getOrCreateResource (/Users/oppara/src/github.com/oppara/playground/aws/cdk/try-cfn-include/node_modules/@aws-cdk/cloudformation-include/lib/cfn-include.ts:519:40)",
+              "new CfnInclude (/Users/oppara/src/github.com/oppara/playground/aws/cdk/try-cfn-include/node_modules/@aws-cdk/cloudformation-include/lib/cfn-include.ts:97:12)",
+              "new TryCfnIncludeStack (/Users/oppara/src/github.com/oppara/playground/aws/cdk/try-cfn-include/lib/try-cfn-include-stack.ts:10:24)",
+              "Object.<anonymous> (/Users/oppara/src/github.com/oppara/playground/aws/cdk/try-cfn-include/bin/try-cfn-include.ts:7:1)",
+              "Module._compile (node:internal/modules/cjs/loader:1109:14)",
+              "Module.m._compile (/Users/oppara/src/github.com/oppara/playground/aws/cdk/try-cfn-include/node_modules/ts-node/src/index.ts:1056:23)",
+              "Module._extensions..js (node:internal/modules/cjs/loader:1138:10)",
+              "Object.require.extensions.<computed> [as .ts] (/Users/oppara/src/github.com/oppara/playground/aws/cdk/try-cfn-include/node_modules/ts-node/src/index.ts:1059:12)",
+              "Module.load (node:internal/modules/cjs/loader:989:32)",
+              "Function.Module._load (node:internal/modules/cjs/loader:829:14)",
+              "Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:76:12)",
+              "main (/Users/oppara/src/github.com/oppara/playground/aws/cdk/try-cfn-include/node_modules/ts-node/src/bin.ts:198:14)",
+              "Object.<anonymous> (/Users/oppara/src/github.com/oppara/playground/aws/cdk/try-cfn-include/node_modules/ts-node/src/bin.ts:288:3)",
+              "Module._compile (node:internal/modules/cjs/loader:1109:14)",
+              "Object.Module._extensions..js (node:internal/modules/cjs/loader:1138:10)",
+              "Module.load (node:internal/modules/cjs/loader:989:32)",
+              "Function.Module._load (node:internal/modules/cjs/loader:829:14)",
+              "Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:76:12)",
+              "node:internal/main/run_main_module:17:47"
+            ]
+          }
+        ],
+        "/TryCfnIncludeStack/Role/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "Role1ABCC5F0",
+            "trace": [
+              "new Role (/Users/oppara/src/github.com/oppara/playground/aws/cdk/try-cfn-include/node_modules/@aws-cdk/aws-iam/lib/role.ts:199:18)",
+              "new TryCfnIncludeStack (/Users/oppara/src/github.com/oppara/playground/aws/cdk/try-cfn-include/lib/try-cfn-include-stack.ts:23:18)",
+              "Object.<anonymous> (/Users/oppara/src/github.com/oppara/playground/aws/cdk/try-cfn-include/bin/try-cfn-include.ts:7:1)",
+              "Module._compile (node:internal/modules/cjs/loader:1109:14)",
+              "Module.m._compile (/Users/oppara/src/github.com/oppara/playground/aws/cdk/try-cfn-include/node_modules/ts-node/src/index.ts:1056:23)",
+              "Module._extensions..js (node:internal/modules/cjs/loader:1138:10)",
+              "Object.require.extensions.<computed> [as .ts] (/Users/oppara/src/github.com/oppara/playground/aws/cdk/try-cfn-include/node_modules/ts-node/src/index.ts:1059:12)",
+              "Module.load (node:internal/modules/cjs/loader:989:32)",
+              "Function.Module._load (node:internal/modules/cjs/loader:829:14)",
+              "Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:76:12)",
+              "main (/Users/oppara/src/github.com/oppara/playground/aws/cdk/try-cfn-include/node_modules/ts-node/src/bin.ts:198:14)",
+              "Object.<anonymous> (/Users/oppara/src/github.com/oppara/playground/aws/cdk/try-cfn-include/node_modules/ts-node/src/bin.ts:288:3)",
+              "Module._compile (node:internal/modules/cjs/loader:1109:14)",
+              "Object.Module._extensions..js (node:internal/modules/cjs/loader:1138:10)",
+              "Module.load (node:internal/modules/cjs/loader:989:32)",
+              "Function.Module._load (node:internal/modules/cjs/loader:829:14)",
+              "Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:76:12)",
+              "node:internal/main/run_main_module:17:47"
+            ]
+          }
+        ],
+        "/TryCfnIncludeStack/Role/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "RoleDefaultPolicy5FFB7DAB",
+            "trace": [
+              "new Policy (/Users/oppara/src/github.com/oppara/playground/aws/cdk/try-cfn-include/node_modules/@aws-cdk/aws-iam/lib/policy.ts:89:22)",
+              "Role.addToPrincipalPolicy (/Users/oppara/src/github.com/oppara/playground/aws/cdk/try-cfn-include/node_modules/@aws-cdk/aws-iam/lib/role.ts:236:28)",
+              "Function.addToPrincipal (/Users/oppara/src/github.com/oppara/playground/aws/cdk/try-cfn-include/node_modules/@aws-cdk/aws-iam/lib/grant.ts:92:61)",
+              "Function.addToPrincipalOrResource (/Users/oppara/src/github.com/oppara/playground/aws/cdk/try-cfn-include/node_modules/@aws-cdk/aws-iam/lib/grant.ts:48:26)",
+              "Import.grant (/Users/oppara/src/github.com/oppara/playground/aws/cdk/try-cfn-include/node_modules/@aws-cdk/aws-s3/lib/bucket.ts:384:27)",
+              "Import.grantRead (/Users/oppara/src/github.com/oppara/playground/aws/cdk/try-cfn-include/node_modules/@aws-cdk/aws-s3/lib/bucket.ts:281:17)",
+              "new TryCfnIncludeStack (/Users/oppara/src/github.com/oppara/playground/aws/cdk/try-cfn-include/lib/try-cfn-include-stack.ts:26:12)",
+              "Object.<anonymous> (/Users/oppara/src/github.com/oppara/playground/aws/cdk/try-cfn-include/bin/try-cfn-include.ts:7:1)",
+              "Module._compile (node:internal/modules/cjs/loader:1109:14)",
+              "Module.m._compile (/Users/oppara/src/github.com/oppara/playground/aws/cdk/try-cfn-include/node_modules/ts-node/src/index.ts:1056:23)",
+              "Module._extensions..js (node:internal/modules/cjs/loader:1138:10)",
+              "Object.require.extensions.<computed> [as .ts] (/Users/oppara/src/github.com/oppara/playground/aws/cdk/try-cfn-include/node_modules/ts-node/src/index.ts:1059:12)",
+              "Module.load (node:internal/modules/cjs/loader:989:32)",
+              "Function.Module._load (node:internal/modules/cjs/loader:829:14)",
+              "Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:76:12)",
+              "main (/Users/oppara/src/github.com/oppara/playground/aws/cdk/try-cfn-include/node_modules/ts-node/src/bin.ts:198:14)",
+              "Object.<anonymous> (/Users/oppara/src/github.com/oppara/playground/aws/cdk/try-cfn-include/node_modules/ts-node/src/bin.ts:288:3)",
+              "Module._compile (node:internal/modules/cjs/loader:1109:14)",
+              "Object.Module._extensions..js (node:internal/modules/cjs/loader:1138:10)",
+              "Module.load (node:internal/modules/cjs/loader:989:32)",
+              "Function.Module._load (node:internal/modules/cjs/loader:829:14)",
+              "Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:76:12)",
+              "node:internal/main/run_main_module:17:47"
+            ]
+          }
+        ],
+        "/TryCfnIncludeStack/CDKMetadata/Default": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CDKMetadata",
+            "trace": [
+              "new MetadataResource (/Users/oppara/src/github.com/oppara/playground/aws/cdk/try-cfn-include/node_modules/@aws-cdk/core/lib/private/metadata-resource.ts:22:24)",
+              "/Users/oppara/src/github.com/oppara/playground/aws/cdk/try-cfn-include/node_modules/@aws-cdk/core/lib/private/synthesis.ts:166:5",
+              "visit (/Users/oppara/src/github.com/oppara/playground/aws/cdk/try-cfn-include/node_modules/@aws-cdk/core/lib/private/synthesis.ts:231:5)",
+              "visit (/Users/oppara/src/github.com/oppara/playground/aws/cdk/try-cfn-include/node_modules/@aws-cdk/core/lib/private/synthesis.ts:227:5)",
+              "injectMetadataResources (/Users/oppara/src/github.com/oppara/playground/aws/cdk/try-cfn-include/node_modules/@aws-cdk/core/lib/private/synthesis.ts:157:3)",
+              "Object.synthesize (/Users/oppara/src/github.com/oppara/playground/aws/cdk/try-cfn-include/node_modules/@aws-cdk/core/lib/private/synthesis.ts:18:3)",
+              "App.synth (/Users/oppara/src/github.com/oppara/playground/aws/cdk/try-cfn-include/node_modules/@aws-cdk/core/lib/stage.ts:94:23)",
+              "process.<anonymous> (/Users/oppara/src/github.com/oppara/playground/aws/cdk/try-cfn-include/node_modules/@aws-cdk/core/lib/app.ts:64:45)",
+              "Object.onceWrapper (node:events:514:26)",
+              "process.emit (node:events:394:28)",
+              "process.emit (node:domain:470:12)",
+              "process.emit (/Users/oppara/src/github.com/oppara/playground/aws/cdk/try-cfn-include/node_modules/source-map-support/source-map-support.js:516:21)"
+            ]
+          }
+        ],
+        "/TryCfnIncludeStack/CDKMetadata/Condition": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CDKMetadataAvailable",
+            "trace": [
+              "new MetadataResource (/Users/oppara/src/github.com/oppara/playground/aws/cdk/try-cfn-include/node_modules/@aws-cdk/core/lib/private/metadata-resource.ts:31:27)",
+              "/Users/oppara/src/github.com/oppara/playground/aws/cdk/try-cfn-include/node_modules/@aws-cdk/core/lib/private/synthesis.ts:166:5",
+              "visit (/Users/oppara/src/github.com/oppara/playground/aws/cdk/try-cfn-include/node_modules/@aws-cdk/core/lib/private/synthesis.ts:231:5)",
+              "visit (/Users/oppara/src/github.com/oppara/playground/aws/cdk/try-cfn-include/node_modules/@aws-cdk/core/lib/private/synthesis.ts:227:5)",
+              "injectMetadataResources (/Users/oppara/src/github.com/oppara/playground/aws/cdk/try-cfn-include/node_modules/@aws-cdk/core/lib/private/synthesis.ts:157:3)",
+              "Object.synthesize (/Users/oppara/src/github.com/oppara/playground/aws/cdk/try-cfn-include/node_modules/@aws-cdk/core/lib/private/synthesis.ts:18:3)",
+              "App.synth (/Users/oppara/src/github.com/oppara/playground/aws/cdk/try-cfn-include/node_modules/@aws-cdk/core/lib/stage.ts:94:23)",
+              "process.<anonymous> (/Users/oppara/src/github.com/oppara/playground/aws/cdk/try-cfn-include/node_modules/@aws-cdk/core/lib/app.ts:64:45)",
+              "Object.onceWrapper (node:events:514:26)",
+              "process.emit (node:events:394:28)",
+              "process.emit (node:domain:470:12)",
+              "process.emit (/Users/oppara/src/github.com/oppara/playground/aws/cdk/try-cfn-include/node_modules/source-map-support/source-map-support.js:516:21)"
+            ]
+          }
+        ]
+      },
+      "displayName": "TryCfnIncludeStack"
+    }
+  }
+}
