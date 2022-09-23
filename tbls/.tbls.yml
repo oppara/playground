@@ -1,0 +1,2 @@
+dsn: mysql://wordpress:wordpress@127.0.0.1:3306/wordpress
+docPath: doc/schema

@@ -1,0 +1,6 @@
+doc/*
+.data/*
+
+*.xlsx
+*.svg
+schema.md
