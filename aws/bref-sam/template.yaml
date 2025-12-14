@@ -1,0 +1,37 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: >
+  Sample SAM Template for bref
+
+Globals:
+  Function:
+    Timeout: 10
+    MemorySize: 512
+
+Resources:
+  TryBrefSamFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: try-bref-sam
+      CodeUri: src
+      Runtime: provided.al2
+      Handler: index.php
+      Layers:
+        - arn:aws:lambda:ap-northeast-1:534081306603:layer:php-84-fpm:35
+      Events:
+        TryBrefSamEvent:
+          Type: Api
+          Properties:
+            Path: /try
+            Method: get
+
+Outputs:
+  TryBrefSamApi:
+    Description: "API Endpoint"
+    Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.${AWS::URLSuffix}/Prod/try/"
+  TryBrefSamFunction:
+    Description: "Hello World Lambda Function ARN"
+    Value: !GetAtt TryBrefSamFunction.Arn
+    # TryBrefSamFunctionIamRole:
+    #   Description: "Lambda Function's IAM Role ARN"
+    #   Value: !GetAtt TryBrefSamFunctionRole.Arn
