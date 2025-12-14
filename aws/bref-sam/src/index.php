@@ -20,4 +20,4 @@ $data = [
 
 // 配列をJSON文字列に変換して出力
 echo json_encode($data, JSON_UNESCAPED_UNICODE);
-?>
+
