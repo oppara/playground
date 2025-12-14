@@ -18,6 +18,9 @@ Resources:
       Handler: index.php
       Layers:
         - arn:aws:lambda:ap-northeast-1:534081306603:layer:php-84-fpm:35
+      Environment:
+        Variables:
+          PHP_INI_SCAN_DIR: /var/task/php-conf:/opt/bref/etc/php/conf.d
       Events:
         TryBrefSamEvent:
           Type: Api
